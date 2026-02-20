@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    container_name: vep-fastpass-frontend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - vehicle_network
+
+networks:
+  vehicle_network:
+    driver: bridge
