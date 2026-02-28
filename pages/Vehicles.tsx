@@ -94,12 +94,19 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
                   {new Date(v.insuranceExpiry).toLocaleDateString()}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">VIN / Chassis</span>
                 <span className="text-sm font-mono text-slate-900">{v.vin}</span>
-              </div>
+              </div> */}
             </div>
-
+<div className="mt-8 flex gap-3">
+              <button 
+                onClick={() => onAction('new-app')}
+                className="flex-1 py-3 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-colors"
+              >
+                Generate QR
+              </button>
+            </div>
             <div className="mt-8 flex gap-3">
               <button className="flex-1 py-3 bg-slate-50 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors">Edit Details</button>
               <button 
