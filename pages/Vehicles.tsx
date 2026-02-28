@@ -19,6 +19,7 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
       setLoading(true);
       setError(null);
       const data = await apiService.Vehicle.getAll();
+      console.log(data)
       setVehicles(data);
     } catch (err: any) {
       console.error('Failed to load vehicles:', err);
@@ -71,8 +72,17 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
       <div className="grid md:grid-cols-2 gap-6">
         {vehicles.map(v => (
           <div key={v.id} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative group overflow-hidden">
-            <div className="absolute top-0 right-0 p-4">
-              <span className="text-[10px] font-black px-2 py-1 bg-slate-100 text-slate-500 rounded uppercase">ACTIVE</span>
+            <div className="absolute top-0 right-0 p-4 flex gap-1">
+              {new Date(v.insuranceExpiry) < new Date() ? (
+                <span className="text-[10px] font-black px-2 py-1 bg-red-100 text-red-500 rounded uppercase">EXPIRED</span>
+              ) : (
+                <>
+                  <span className="text-[10px] font-black px-2 py-1 bg-emerald-100 text-emerald-500 rounded uppercase">ACTIVE</span>
+                  {new Date(v.insuranceExpiry) < new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) && (
+                    <span className="text-[10px] font-black px-2 py-1 bg-orange-100 text-orange-500 rounded uppercase">Expiring Soon</span>
+                  )}
+                </>
+              )}
             </div>
             
             <div className="flex items-start mb-6">

@@ -50,12 +50,12 @@ export interface User {
 export interface Vehicle {
   id: string;
   userId: string;
-  plate_no: string;
+  plateNo: string;
   make: string;
   model: string;
   year: number;
   vin: string;
-  insurance_expiry: string;
+  insuranceExpiry: string;
   createdAt: string;
 }
 
