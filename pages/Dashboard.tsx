@@ -67,61 +67,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onAction }) => {
         </div>
       </section>
 
-      {/* Alerts */}
-      {(expiringVehicles.length > 0 || apps.some(a => a.status === ApplicationStatus.REJECTED)) && (
-        <section className="space-y-4">
-          <h3 className="text-lg font-bold flex items-center">
-            <svg className="w-5 h-5 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            Urgent Attention
-          </h3>
-          {expiringVehicles.map(v => (
-            <div key={v.id} className="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-center justify-between">
-              <div>
-                <p className="font-bold text-rose-900">Insurance Expiring Soon</p>
-                <p className="text-sm text-rose-700">{v.plateNo} ({v.make} {v.model}) expires on {v.insuranceExpiry}</p>
-              </div>
-              <button className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-bold hover:bg-rose-700">Update Now</button>
-            </div>
-          ))}
-          {apps.filter(a => a.status === ApplicationStatus.REJECTED).map(a => (
-            <div key={a.id} className="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-center justify-between">
-              <div>
-                <p className="font-bold text-rose-900">Application Rejected</p>
-                <p className="text-sm text-rose-700">Reason: {a.decisionReason || 'Missing documentation'}</p>
-              </div>
-              <button onClick={() => onAction('new-app')} className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-bold hover:bg-rose-700">Fix & Resubmit</button>
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* Quick Actions */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-emerald-600 p-8 rounded-2xl shadow-lg text-white">
-          <h3 className="text-xl font-bold mb-2">Crossing Soon?</h3>
-          <p className="text-emerald-100 mb-6">Generate your digital permit QR code for instant checkpoint verification.</p>
-          <Link to="/driver/permit"
-            disabled={!apps.some(a => a.status === ApplicationStatus.APPROVED)}
-            onClick={() => onAction('qr-permit')}
-            className="w-full p-3 bg-white text-emerald-700 rounded-xl font-bold hover:bg-emerald-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Generate Permit QR
-          </Link>
-        </div>
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-          <h3 className="text-xl font-bold mb-2 text-slate-900">New Permit</h3>
-          <p className="text-slate-500 mb-6">Register a new vehicle or apply for a fresh VEP entry permit.</p>
-          <Link to="/driver/new-application"
-            onClick={() => onAction('new-app')}
-            className="w-full p-3 border-2 border-emerald-600 text-emerald-600 rounded-xl font-bold hover:bg-emerald-50 transition-colors"
-          >
-            Start New Application
-          </Link>
-        </div>
-      </section>
-
       {/* Application Status */}
       <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-6 border-b">

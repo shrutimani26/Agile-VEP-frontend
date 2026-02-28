@@ -17,6 +17,7 @@ import Notifications from "./pages/Notifications";
 import { UserRole } from "./types";
 import RequireRole from "./components/RequireRole";
 import { useAuth } from "./Auth/useAuth";
+import Payment from "./pages/Payment";
 
 const App: React.FC = () => {
   const { user, logout } = useAuth();
@@ -46,6 +47,14 @@ const App: React.FC = () => {
         />
 
         {/* Protected Driver Routes */}
+        <Route
+          path="/driver/payment"
+          element={
+            <RequireRole role={UserRole.DRIVER}>
+              <Payment />
+            </RequireRole>
+          }
+        />
         <Route
           path="/driver/vehicles"
           element={
