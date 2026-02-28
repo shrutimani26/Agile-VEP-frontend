@@ -22,7 +22,7 @@ const Login: React.FC<LoginProps> = ({ role }) => {
         return;
       }
       const targetRoute = user.role === UserRole.DRIVER
-        ? "/driver/dashboard"
+        ? "/driver/vehicles"
         : "/officer/queue";
       navigate(targetRoute);
     }
@@ -40,7 +40,7 @@ const Login: React.FC<LoginProps> = ({ role }) => {
       }
       console.log(loggedInUser)
 
-      navigate(role === UserRole.DRIVER ? "/driver/dashboard" : "/officer/queue");
+      navigate(role === UserRole.DRIVER ? "/driver/vehicles" : "/officer/queue");
     } catch (error: any) {
       setError(error.response?.data?.error || "Login failed");
     }

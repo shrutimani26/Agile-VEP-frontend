@@ -25,8 +25,8 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
       return officerRoutes[tabId] || '/';
     }
     const driverRoutes: Record<string, string> = {
-      'dashboard': '/driver/dashboard',
       'vehicles': '/driver/vehicles',
+      'dashboard': '/driver/dashboard',
       'history': '/driver/history',
       'notifications': '/driver/notifications',
     };

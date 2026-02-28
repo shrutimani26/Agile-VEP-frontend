@@ -20,7 +20,7 @@ import { useAuth } from "./Auth/useAuth";
 
 const App: React.FC = () => {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("vehicles");
 
   return (
     <Layout
@@ -47,18 +47,18 @@ const App: React.FC = () => {
 
         {/* Protected Driver Routes */}
         <Route
-          path="/driver/dashboard"
-          element={
-            <RequireRole role={UserRole.DRIVER}>
-              <Dashboard />
-            </RequireRole>
-          }
-        />
-        <Route
           path="/driver/vehicles"
           element={
             <RequireRole role={UserRole.DRIVER}>
               <Vehicles />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/driver/dashboard"
+          element={
+            <RequireRole role={UserRole.DRIVER}>
+              <Dashboard />
             </RequireRole>
           }
         />
