@@ -87,7 +87,7 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/driver/permit"
+          path="/driver/permit/:vehicleId"
           element={
             <RequireRole role={UserRole.DRIVER}>
               <PermitQR />

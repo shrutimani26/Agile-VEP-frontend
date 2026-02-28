@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Vehicle } from '../types';
 import apiService from '../api/api.service';
 import AddVehicleModal from '../components/AddVehicleModal';
+import { useNavigate } from 'react-router-dom';
 
 interface Props { 
   onAction: (tab: string) => void;
@@ -13,7 +14,7 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const loadVehicles = async () => {
     try {
       setLoading(true);
@@ -104,19 +105,20 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
                   {new Date(v.insuranceExpiry).toLocaleDateString()}
                 </span>
               </div>
-              {/* <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">VIN / Chassis</span>
-                <span className="text-sm font-mono text-slate-900">{v.vin}</span>
-              </div> */}
             </div>
-<div className="mt-8 flex gap-3">
-              <button 
-                onClick={() => onAction('new-app')}
-                className="flex-1 py-3 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-colors"
-              >
-                Generate QR
-              </button>
-            </div>
+          <div className="mt-8 flex gap-3">
+            <button 
+              onClick={() => navigate(`/driver/permit/${v.id}`)}
+              disabled={new Date(v.insuranceExpiry) < new Date()}
+              className={`flex-1 py-3 rounded-xl text-sm font-bold transition-colors ${
+                new Date(v.insuranceExpiry) < new Date()
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+              }`}
+            >
+              Generate QR
+            </button>
+          </div>
             <div className="mt-8 flex gap-3">
               <button className="flex-1 py-3 bg-slate-50 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors">Edit Details</button>
               <button 
