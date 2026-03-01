@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Vehicle } from '../types';
 import apiService from '../api/api.service';
 import AddVehicleModal from '../components/AddVehicleModal';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Props { 
   onAction: (tab: string) => void;
@@ -59,15 +59,17 @@ const Vehicles: React.FC<Props> = ({ onAction }) => {
           <h2 className="text-3xl font-extrabold text-slate-900">My Vehicles</h2>
           <p className="text-slate-500">Manage Malaysian-registered vehicles linked to your profile.</p>
         </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition-all flex items-center"
-        >
+
+        <Link to="/driver/new-application" 
+          
+          >
+        <div className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition-all flex items-center">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
-          Add Vehicle
-        </button>
+          Start New Application
+          </div>
+        </Link>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">

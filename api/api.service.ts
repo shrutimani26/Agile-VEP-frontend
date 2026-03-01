@@ -106,8 +106,15 @@ export const VehicleAPI = {
 // ============================================================================
 
 export const ApplicationAPI = {
-  create: async (vehicleId: number) => {
-    const response = await apiClient.post('/applications', { vehicle_id: vehicleId });
+  create: async (vehicleData: {
+    plate_no: string;
+    make: string;
+    model: string;
+    year: number;
+    vin: string;
+    insurance_expiry: string;
+  }) => {
+    const response = await apiClient.post('/applications', vehicleData);
     return response.data;
   },
 
