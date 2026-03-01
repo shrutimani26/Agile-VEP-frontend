@@ -6,12 +6,10 @@ export enum UserRole {
 }
 
 export enum ApplicationStatus {
-  DRAFT = 'DRAFT',
   SUBMITTED = 'SUBMITTED',
-  PENDING_REVIEW = 'PENDING_REVIEW',
+  PENDING_REVIEW = 'PENDING REVIEW',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
-  EXPIRED = 'EXPIRED'
 }
 
 export enum PaymentStatus {
@@ -62,7 +60,7 @@ export interface Vehicle {
 export interface Application {
   id: string;
   userId: string;
-  vehicleId: string;
+  vehicle: Vehicle | null;
   status: ApplicationStatus;
   paymentStatus?: PaymentStatus;
   submittedAt?: string;

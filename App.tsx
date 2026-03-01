@@ -67,7 +67,7 @@ const App: React.FC = () => {
           path="/driver/dashboard"
           element={
             <RequireRole role={UserRole.DRIVER}>
-              <Dashboard />
+              <Dashboard setActiveTab={setActiveTab} />
             </RequireRole>
           }
         />

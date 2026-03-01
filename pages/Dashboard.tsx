@@ -1,48 +1,44 @@
-
 import React, { useState, useEffect } from 'react';
-import { User, Application, ApplicationStatus, Vehicle } from '../types';
+import { Application, ApplicationStatus } from '../types';
 import { useAuth } from '@/Auth/useAuth';
 import apiService from '@/api/api.service';
-import { Link } from 'react-router';
 
 interface DashboardProps {
-  onAction: (tab: string) => void;
+  setActiveTab: (tab: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ onAction }) => {
+const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const [apps, setApps] = useState<Application[]>([]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) return;
-    console.log("Loading dashboard data for user:", user);
-    const loadData = async () => {
-      const [userApps, userVehicles] = await Promise.all([
-        apiService.Application.getAll(),
-        apiService.Vehicle.getAll(),
-      ]);
-      setApps(userApps);
-      setVehicles(userVehicles);
+    setActiveTab('dashboard');
+    if (!user) {
       setLoading(false);
-    };
-    loadData();
+      return;
+    }
 
+    const loadData = async () => {
+      try {
+        const userApps = await apiService.Application.getAll();
+        setApps(userApps ?? []);
+      } catch (err: any) {
+        setError(err.response?.data?.error || 'Failed to load dashboard data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, [user?.id]);
 
   const stats = [
-    { label: 'Active Permits', value: apps.filter(a => a.status === ApplicationStatus.APPROVED).length, color: 'emerald' },
-    { label: 'Pending', value: apps.filter(a => a.status === ApplicationStatus.PENDING_REVIEW || a.status === ApplicationStatus.SUBMITTED).length, color: 'amber' },
-    { label: 'Vehicles', value: vehicles.length, color: 'blue' },
+    { label: 'Active Permits', value: apps.filter(a => a.status === ApplicationStatus.APPROVED).length, cardClass: 'border-2 border-emerald-100 bg-emerald-50', labelClass: 'text-emerald-700', valueClass: 'text-emerald-900' },
+    { label: 'Pending', value: apps.filter(a => a.status === ApplicationStatus.PENDING_REVIEW || a.status === ApplicationStatus.SUBMITTED).length, cardClass: 'border-2 border-amber-100 bg-amber-50', labelClass: 'text-amber-700', valueClass: 'text-amber-900' },
+    { label: 'Vehicles', value: apps.filter(a => a.vehicle).length, cardClass: 'border-2 border-blue-100 bg-blue-50', labelClass: 'text-blue-700', valueClass: 'text-blue-900' },
   ];
-
-  const expiringVehicles = vehicles.filter(v => {
-    const expiry = new Date(v.insuranceExpiry);
-    const now = new Date();
-    const diff = (expiry.getTime() - now.getTime()) / (1000 * 3600 * 24);
-    return diff < 30; // 30 days
-  });
 
   if (loading) {
     return (
@@ -52,16 +48,24 @@ const Dashboard: React.FC<DashboardProps> = ({ onAction }) => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="p-6 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
-      {/* Welcome & Stats */}
+      {/* Stats */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
         <h2 className="text-2xl font-bold text-slate-900 mb-6">Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {stats.map(stat => (
-            <div key={stat.label} className={`p-4 rounded-xl border-2 border-${stat.color}-100 bg-${stat.color}-50`}>
-              <p className={`text-${stat.color}-700 text-sm font-semibold uppercase tracking-wider`}>{stat.label}</p>
-              <p className={`text-3xl font-bold text-${stat.color}-900`}>{stat.value}</p>
+            <div key={stat.label} className={`p-4 rounded-xl ${stat.cardClass}`}>
+              <p className={`${stat.labelClass} text-sm font-semibold uppercase tracking-wider`}>{stat.label}</p>
+              <p className={`text-3xl font-bold ${stat.valueClass}`}>{stat.value}</p>
             </div>
           ))}
         </div>
@@ -83,31 +87,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onAction }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {apps.map(app => {
-                const vehicle = vehicles.find(v => v.id === app.vehicleId);
-                return (
-                  <tr key={app.id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4">
-                      <p className="font-bold text-slate-900">{vehicle?.plateNo || 'N/A'}</p>
-                      <p className="text-xs text-slate-500">{vehicle?.make} {vehicle?.model}</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${app.status === ApplicationStatus.APPROVED ? 'bg-emerald-100 text-emerald-700' :
-                        app.status === ApplicationStatus.REJECTED ? 'bg-rose-100 text-rose-700' :
-                          'bg-amber-100 text-amber-700'
-                        }`}>
-                        {app.status.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : '-'}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {app.expiryDate ? new Date(app.expiryDate).toLocaleDateString() : 'N/A'}
-                    </td>
-                  </tr>
-                );
-              })}
+              {apps.map(app => (
+                <tr key={app.id} className="hover:bg-slate-50">
+                  <td className="px-6 py-4">
+                    {/* ← use nested vehicle directly from app */}
+                    <p className="font-bold text-slate-900">{app.vehicle?.plateNo || 'N/A'}</p>
+                    <p className="text-xs text-slate-500">{app.vehicle?.make} {app.vehicle?.model}</p>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                      app.status === ApplicationStatus.APPROVED ? 'bg-emerald-100 text-emerald-700' :
+                      app.status === ApplicationStatus.REJECTED ? 'bg-rose-100 text-rose-700' :
+                      'bg-amber-100 text-amber-700'
+                    }`}>
+                      {app.status.replace('_', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : '-'}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {app.expiryDate ? new Date(app.expiryDate).toLocaleDateString() : 'N/A'}
+                  </td>
+                </tr>
+              ))}
               {apps.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-slate-400">No current applications found.</td>

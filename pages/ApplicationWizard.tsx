@@ -56,7 +56,7 @@ const ApplicationWizard: React.FC = () => {
       console.log('Application submitted:', submitted);
 
       alert('Application submitted successfully!');
-      navigate('/driver/dashboard');
+      navigate('/driver/vehicles');
     } catch (err: any) {
       console.error('Failed to submit application:', err);
       setError(err.response?.data?.error || 'Failed to submit application. Please try again.');
