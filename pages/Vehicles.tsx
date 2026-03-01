@@ -99,21 +99,14 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
             <div className="bg-slate-50 rounded-2xl border border-slate-100 divide-y divide-slate-100">
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status</span>
-                <div className="flex items-center gap-2">
-                  {application.status === 'REJECTED' && (
-                    <span className="text-xs font-black px-2 py-1 rounded uppercase bg-orange-100 text-orange-600">
-                      Insufficient Funds
-                    </span>
-                  )}
-                  <span className={`text-xs font-black px-2 py-1 rounded uppercase ${
-                    application.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' :
-                    application.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
-                    application.status === 'SUBMITTED' ? 'bg-blue-100 text-blue-700' :
-                    'bg-slate-100 text-slate-600'
-                  }`}>
-                    {application.status}
-                  </span>
-                </div>
+                <span className={`text-xs font-black px-2 py-1 rounded uppercase ${
+                  application.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' :
+                  application.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
+                  application.status === 'SUBMITTED' ? 'bg-blue-100 text-blue-700' :
+                  'bg-slate-100 text-slate-600'
+                }`}>
+                  {application.status}
+                </span>
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Submitted At</span>
@@ -188,7 +181,7 @@ const Vehicles: React.FC = () => {
     switch (status) {
       case 'SUBMITTED':      return 'Your application has been submitted and is awaiting review.';
       case 'PENDING REVIEW': return 'Your application is currently being reviewed by an officer.';
-      case 'REJECTED':       return 'Your application was rejected due to insufficient funds. Please start a new application.';
+      case 'REJECTED':       return 'Your application was rejected. Please start a new application.';
       case 'DRAFT':          return 'Your application is incomplete.';
       case 'EXPIRED':        return 'Your permit has expired. Please renew your application.';
       default:               return '';
@@ -260,17 +253,9 @@ const Vehicles: React.FC = () => {
                       </>
                     )
                   ) : (
-                    <div className="flex gap-1">
-                      {/* Insufficient funds badge for rejected */}
-                      {isRejected && (
-                        <span className="text-[10px] font-black px-2 py-1 bg-orange-100 text-orange-600 rounded uppercase">
-                          Insufficient Funds
-                        </span>
-                      )}
-                      <span className={`text-[10px] font-black px-2 py-1 rounded uppercase ${getStatusStyle(application.status)}`}>
-                        {application.status}
-                      </span>
-                    </div>
+                    <span className={`text-[10px] font-black px-2 py-1 rounded uppercase ${getStatusStyle(application.status)}`}>
+                      {application.status}
+                    </span>
                   )}
                 </div>
 
@@ -297,7 +282,6 @@ const Vehicles: React.FC = () => {
                           {new Date(v.insuranceExpiry).toLocaleDateString()}
                         </span>
                       </div>
-                
                     </div>
 
                     <div className="mt-6 grid grid-cols-2 gap-3">
