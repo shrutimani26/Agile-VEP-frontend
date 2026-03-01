@@ -18,6 +18,7 @@ import { UserRole } from "./types";
 import RequireRole from "./components/RequireRole";
 import { useAuth } from "./Auth/useAuth";
 import Payment from "./pages/Payment";
+import Profile from "./pages/Profile";
 
 const App: React.FC = () => {
   const { user, logout } = useAuth();
@@ -103,7 +104,14 @@ const App: React.FC = () => {
             </RequireRole>
           }
         />
-
+        <Route
+          path="/driver/profile"
+          element={
+            <RequireRole role={UserRole.DRIVER}>
+              <Profile setActiveTab={setActiveTab} />
+            </RequireRole>
+          }
+        />
         {/* Protected Officer Routes */}
         <Route
           path="/officer/queue"

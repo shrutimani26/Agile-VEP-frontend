@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, UserRole } from '../types';
 
 interface LayoutProps {
@@ -77,8 +77,9 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
               ))}
             </nav>
 
-            <div className="p-6 border-t border-slate-800 space-y-4 m-4 rounded-3xl bg-slate-800/50">
-              <div className="flex items-center">
+            <div className="p-6 border-t border-slate-800 space-y-4 m-4 rounded-3xl bg-slate-800/50 ">
+  
+              <div className="flex items-center" onClick={() => navigate('/driver/profile')}>
                 <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center font-bold text-white text-sm shadow-inner">
                   {user.name.charAt(0)}
                 </div>
@@ -87,6 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
                   <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest">{user.role}</p>
                 </div>
               </div>
+          
               
               <button 
                 onClick={() => {

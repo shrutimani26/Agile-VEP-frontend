@@ -6,9 +6,9 @@ import { setAuthToken } from "@/api/api.service";
 type TUserProfile = {
     id: number;
     email: string;
-    full_name: string;
-    phone_number: string;
-    nric_passport: string;
+    name: string;
+    phone: string;
+    maskedId: string;
     role: string;
 };
 
@@ -54,6 +54,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
                 ] = `Bearer ${newToken}`;
                 setAuthToken(newToken);
                 const userRes = await axios.get("/auth/me");
+                console.log(userRes.data.user)
                 setUser(userRes.data.user);
             } catch {
                 // silently fail if no refresh token

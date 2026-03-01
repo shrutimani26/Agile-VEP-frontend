@@ -34,15 +34,14 @@ export enum DocumentType {
   ID = 'ID'
 }
 
-export interface User {
-  id: string;
-  role: UserRole;
-  name: string;
+// types.ts
+export type User = {
+  id: number;
   email: string;
-  phone: string;
-  maskedId: string;
-  isVerified: boolean;
-  createdAt: string;
+  full_name: string;
+  phone_number: string;
+  nric_passport: string;
+  role: UserRole;
 }
 
 export interface Vehicle {
