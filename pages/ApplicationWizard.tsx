@@ -213,8 +213,8 @@ const ApplicationWizard: React.FC = () => {
           {step === 3 && (
             <div className="space-y-6 animate-fadeIn">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">Review & Payment</h2>
-                <p className="text-slate-500 mt-1">Confirm your vehicle details and complete payment.</p>
+                <h2 className="text-2xl font-bold text-slate-900">Review & Submit</h2>
+                <p className="text-slate-500 mt-1">Confirm your vehicle details.</p>
               </div>
 
               {error && (
@@ -256,40 +256,7 @@ const ApplicationWizard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Payment */}
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-500">Permit Fee</span>
-                  <span className="font-bold text-slate-900">S$ 5.00</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-500">Service Fee</span>
-                  <span className="font-bold text-slate-900">S$ 0.50</span>
-                </div>
-                <div className="pt-4 border-t border-slate-200 flex justify-between items-center">
-                  <span className="font-bold text-slate-900">Total Payable</span>
-                  <span className="text-xl font-extrabold text-emerald-600">S$ 5.50</span>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <p className="text-sm font-semibold text-slate-700">Select Payment Method</p>
-                <div className="p-4 border-2 border-emerald-600 bg-emerald-50 rounded-xl flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-10 h-6 bg-slate-800 rounded flex items-center justify-center text-[8px] text-white font-bold mr-3">VISA</div>
-                    <span className="font-medium text-slate-900">•••• 4432 (Saved)</span>
-                  </div>
-                  <div className="w-5 h-5 rounded-full border-4 border-emerald-600 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-emerald-600"></div>
-                  </div>
-                </div>
-                <button className="text-sm text-emerald-600 font-bold flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  Add new payment method
-                </button>
-              </div>
+              
 
               <div className="flex items-start">
                 <input type="checkbox" className="mt-1 mr-3 h-4 w-4 text-emerald-600 focus:ring-emerald-500 rounded border-slate-300" defaultChecked />
@@ -320,7 +287,7 @@ const ApplicationWizard: React.FC = () => {
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 Submitting...
               </>
-            ) : step === 3 ? 'Confirm & Pay' : 'Next Step'}
+            ) : step === 3 ? 'Submit' : 'Next Step'}
           </button>
         </div>
       </div>

@@ -7,7 +7,7 @@ const Landing: React.FC = () => {
     <div className="max-w-4xl mx-auto py-12 px-4">
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
-          Seamless Border Entry for <span className="text-emerald-600">MY-SG Vehicles</span>
+          Auto<span className="text-emerald-600">QRPass</span>
         </h1>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-10">
           VEP FastPass reduces permit lead times and border uncertainty with instant status tracking and digital QR clearance.

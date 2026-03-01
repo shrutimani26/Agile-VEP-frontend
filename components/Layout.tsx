@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, UserRole } from '../types';
-import AIHelp from './AIHelp';
 
 interface LayoutProps {
   user: User | null;
@@ -122,12 +121,9 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
         <footer className="py-12 px-8 text-center border-t border-slate-200/60 text-[10px] text-slate-400 mt-auto uppercase tracking-[0.3em] font-black">
           <div className="flex flex-col gap-3 items-center">
             <div className="w-8 h-1 bg-emerald-500 rounded-full mb-2"></div>
-            <p>Prototype for Demo only. Official VEP info at <a href="https://vep.jpj.gov.my" target="_blank" className="text-emerald-600 hover:underline">vep.jpj.gov.my</a></p>
           </div>
         </footer>
       </main>
-
-      <AIHelp />
     </div>
   );
 };
