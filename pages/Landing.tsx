@@ -20,11 +20,11 @@ const Landing: React.FC = () => {
             I am a Malaysian Driver
           </Link>
 
-          <Link to="/login/officer"
+          {/* <Link to="/login/officer"
             className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 border-2 border-slate-200 rounded-xl font-bold text-lg hover:bg-slate-50 transition-colors"
           >
             Official Access (Officer Portal)
-          </Link>
+          </Link> */}
         </div>
       </div>
 

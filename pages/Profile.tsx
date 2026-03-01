@@ -13,6 +13,7 @@ const Profile: React.FC<DashboardProps> = ({ setActiveTab }) => {
     phone_number: '',
     email: '',
     nric_passport: '',
+    passport: 'A12345678',       // hardcoded — not in backend model yet
     date_of_birth: '1992-07-12', // hardcoded — not in backend model yet
     citizenship: 'Malaysian',    // hardcoded — not in backend model yet
   });
@@ -135,13 +136,22 @@ const Profile: React.FC<DashboardProps> = ({ setActiveTab }) => {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Passport Number</label>
-                <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
-                  A12345678
-                </p>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="e.g. A12345678"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-medium"
+                    value={formData.passport}
+                    onChange={e => setFormData({ ...formData, passport: e.target.value })}
+                  />
+                ) : (
+                  <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
+                    {formData.passport || '—'}
+                  </p>
+                )}
               </div>
             </div>
 
-            
 
           </div>
 
