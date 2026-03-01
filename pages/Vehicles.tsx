@@ -21,7 +21,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
         {/* Header */}
         <div className="bg-emerald-600 p-6 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">Application Details</h2>
+            <h2 className="text-xl font-bold text-white">Vehicle Details</h2>
             <p className="text-emerald-100 text-xs mt-0.5 uppercase tracking-widest">Permit #{application.id}</p>
           </div>
           <button onClick={onClose} className="text-white/70 hover:text-white transition-colors">

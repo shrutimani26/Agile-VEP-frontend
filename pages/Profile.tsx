@@ -1,12 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/Auth/useAuth';
-
 
 interface DashboardProps {
   setActiveTab: (tab: string) => void;
 }
 
-const Profile: React.FC = ({setActiveTab}) => {
+const Profile: React.FC<DashboardProps> = ({ setActiveTab }) => {
   const { user, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,17 +13,21 @@ const Profile: React.FC = ({setActiveTab}) => {
     phone_number: '',
     email: '',
     nric_passport: '',
+    date_of_birth: '1992-07-12', // hardcoded — not in backend model yet
+    citizenship: 'Malaysian',    // hardcoded — not in backend model yet
   });
 
   useEffect(() => {
     setActiveTab('profile');
     if (user) {
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
+        // Mapped from backend to_dict(): name, phone, email, maskedId
         full_name: user.name || '',
         phone_number: user.phone || '',
         email: user.email || '',
         nric_passport: user.maskedId || '',
-      });
+      }));
     }
   }, [user]);
 
@@ -38,6 +41,7 @@ const Profile: React.FC = ({setActiveTab}) => {
   return (
     <div className="max-w-2xl mx-auto py-8">
       <div className="bg-white rounded-[2.5rem] shadow-xl border border-slate-200 overflow-hidden">
+
         {/* Header */}
         <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
           <div>
@@ -54,23 +58,14 @@ const Profile: React.FC = ({setActiveTab}) => {
         <div className="p-8 space-y-6">
           <div className="grid gap-6">
 
-            {/* Full Name */}
+            {/* Full Name — read-only */}
             <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Full Name</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-medium"
-                  value={formData.full_name}
-                  onChange={e => setFormData({ ...formData, full_name: e.target.value })}
-                />
-              ) : (
-                <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">{formData.full_name}</p>
-              )}
+              <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">{formData.full_name}</p>
             </div>
 
+            {/* Email & Phone */}
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Email */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email Address</label>
                 {isEditing ? (
@@ -85,7 +80,6 @@ const Profile: React.FC = ({setActiveTab}) => {
                 )}
               </div>
 
-              {/* Phone */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Phone Number</label>
                 {isEditing ? (
@@ -101,30 +95,54 @@ const Profile: React.FC = ({setActiveTab}) => {
               </div>
             </div>
 
-            {/* NRIC / Passport */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">NRIC / Passport</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-medium"
-                  value={formData.nric_passport}
-                  onChange={e => setFormData({ ...formData, nric_passport: e.target.value })}
-                />
-              ) : (
-                <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">{formData.nric_passport}</p>
-              )}
-            </div>
+            {/* DOB & Citizenship — hardcoded, always read-only */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date of Birth</label>
+                <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
+                  12 July 1992
+                </p>
+              </div>
 
-            {/* Role Badge (read-only) */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Role</label>
-              <div className="px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-black uppercase rounded-full">
-                  {user.role}
-                </span>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Citizenship</label>
+                <div className="px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase rounded-full">
+                    Malaysian
+                  </span>
+                </div>
               </div>
             </div>
+
+            {/* ID Card (MyKad) & Passport — split from single nric_passport field */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">ID Card</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="e.g. 920712-14-1234"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-medium"
+                    value={formData.nric_passport}
+                    onChange={e => setFormData({ ...formData, nric_passport: e.target.value })}
+                  />
+                ) : (
+                  <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
+                    {formData.nric_passport || '—'}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Passport Number</label>
+                <p className="text-lg font-bold text-slate-900 px-4 py-3 bg-slate-50 rounded-xl border border-transparent">
+                  A12345678
+                </p>
+              </div>
+            </div>
+
+            
+
           </div>
 
           {/* Actions */}
