@@ -39,9 +39,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
             <div className="bg-slate-50 rounded-2xl border border-slate-100 divide-y divide-slate-100">
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</span>
-                <span className="text-sm font-bold text-slate-900">
-                  { 'Ahmad bin Abdullah'}
-                </span>
+                <span className="text-sm font-bold text-slate-900">Ahmad bin Abdullah</span>
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Date of Birth</span>
@@ -53,15 +51,11 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Phone Number</span>
-                <span className="text-sm font-bold text-slate-900">
-                  { '+65 12341234'}
-                </span>
+                <span className="text-sm font-bold text-slate-900">+65 12341234</span>
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email</span>
-                <span className="text-sm font-bold text-slate-900">
-                  {'ahmad@example.com'}
-                </span>
+                <span className="text-sm font-bold text-slate-900">ahmad@example.com</span>
               </div>
             </div>
           </div>
@@ -105,14 +99,21 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
             <div className="bg-slate-50 rounded-2xl border border-slate-100 divide-y divide-slate-100">
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status</span>
-                <span className={`text-xs font-black px-2 py-1 rounded uppercase ${
-                  application.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' :
-                  application.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
-                  application.status === 'SUBMITTED' ? 'bg-blue-100 text-blue-700' :
-                  'bg-slate-100 text-slate-600'
-                }`}>
-                  {application.status}
-                </span>
+                <div className="flex items-center gap-2">
+                  {application.status === 'REJECTED' && (
+                    <span className="text-xs font-black px-2 py-1 rounded uppercase bg-orange-100 text-orange-600">
+                      Insufficient Funds
+                    </span>
+                  )}
+                  <span className={`text-xs font-black px-2 py-1 rounded uppercase ${
+                    application.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-700' :
+                    application.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
+                    application.status === 'SUBMITTED' ? 'bg-blue-100 text-blue-700' :
+                    'bg-slate-100 text-slate-600'
+                  }`}>
+                    {application.status}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between items-center px-5 py-3">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Submitted At</span>
@@ -120,14 +121,6 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ application, onClose }) => 
                   {application.submittedAt ? new Date(application.submittedAt).toLocaleDateString() : '—'}
                 </span>
               </div>
-              {application.expiryDate && (
-                <div className="flex justify-between items-center px-5 py-3">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Permit Expiry</span>
-                  <span className="text-sm font-bold text-slate-900">
-                    {new Date(application.expiryDate).toLocaleDateString()}
-                  </span>
-                </div>
-              )}
               {application.decisionReason && (
                 <div className="flex justify-between items-center px-5 py-3">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Reason</span>
@@ -195,7 +188,7 @@ const Vehicles: React.FC = () => {
     switch (status) {
       case 'SUBMITTED':      return 'Your application has been submitted and is awaiting review.';
       case 'PENDING REVIEW': return 'Your application is currently being reviewed by an officer.';
-      case 'REJECTED':       return 'Your application was rejected. Please start a new application.';
+      case 'REJECTED':       return 'Your application was rejected due to insufficient funds. Please start a new application.';
       case 'DRAFT':          return 'Your application is incomplete.';
       case 'EXPIRED':        return 'Your permit has expired. Please renew your application.';
       default:               return '';
@@ -246,6 +239,7 @@ const Vehicles: React.FC = () => {
             if (!v) return null;
 
             const isApproved = application.status === 'APPROVED';
+            const isRejected = application.status === 'REJECTED';
             const isInsuranceExpired = new Date(v.insuranceExpiry) < new Date();
             const isExpiringSoon = !isInsuranceExpired && new Date(v.insuranceExpiry) < new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
 
@@ -266,9 +260,17 @@ const Vehicles: React.FC = () => {
                       </>
                     )
                   ) : (
-                    <span className={`text-[10px] font-black px-2 py-1 rounded uppercase ${getStatusStyle(application.status)}`}>
-                      {application.status}
-                    </span>
+                    <div className="flex gap-1">
+                      {/* Insufficient funds badge for rejected */}
+                      {isRejected && (
+                        <span className="text-[10px] font-black px-2 py-1 bg-orange-100 text-orange-600 rounded uppercase">
+                          Insufficient Funds
+                        </span>
+                      )}
+                      <span className={`text-[10px] font-black px-2 py-1 rounded uppercase ${getStatusStyle(application.status)}`}>
+                        {application.status}
+                      </span>
+                    </div>
                   )}
                 </div>
 
@@ -295,18 +297,10 @@ const Vehicles: React.FC = () => {
                           {new Date(v.insuranceExpiry).toLocaleDateString()}
                         </span>
                       </div>
-                      {application.expiryDate && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Permit Expiry</span>
-                          <span className="text-sm font-black text-slate-900">
-                            {new Date(application.expiryDate).toLocaleDateString()}
-                          </span>
-                        </div>
-                      )}
+                
                     </div>
 
                     <div className="mt-6 grid grid-cols-2 gap-3">
-                      {/* Generate QR - full width spanning 2 columns */}
                       <button
                         onClick={() => navigate(`/driver/permit/${v.id}`)}
                         disabled={isInsuranceExpired}
@@ -318,16 +312,12 @@ const Vehicles: React.FC = () => {
                       >
                         Generate QR
                       </button>
-
-                      {/* View Details - 1 column */}
                       <button
                         onClick={() => setSelectedApplication(application)}
                         className="py-3 bg-slate-50 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors"
                       >
                         View Details
                       </button>
-
-                      {/* Renew - 1 column */}
                       <button
                         onClick={() => navigate('/driver/new-application')}
                         className="py-3 bg-slate-50 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors"
@@ -337,7 +327,7 @@ const Vehicles: React.FC = () => {
                     </div>
                   </>
                 ) : (
-                  /* Not approved: status message + optional View Details */
+                  /* Not approved: status message + buttons */
                   <div className="pt-6 border-t border-slate-50 space-y-3">
                     <div className={`p-4 rounded-xl text-sm font-medium ${getStatusStyle(application.status)}`}>
                       <span className="font-black uppercase text-xs tracking-widest block mb-1">{application.status}</span>
@@ -351,7 +341,7 @@ const Vehicles: React.FC = () => {
                       View Details
                     </button>
 
-                    {(application.status === 'REJECTED') && (
+                    {isRejected && (
                       <button
                         onClick={() => navigate('/driver/new-application')}
                         className="w-full py-3 bg-emerald-50 text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-colors"
